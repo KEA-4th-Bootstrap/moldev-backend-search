@@ -1,6 +1,6 @@
 package org.bootstrap.search.repository;
 
-import org.bootstrap.search.document.Post;
+import org.bootstrap.search.dto.support.PostsDto;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -8,6 +8,6 @@ import java.io.IOException;
 @Repository
 public interface SearchRepository {
 
-    public Post findPostByText(String text) throws IOException;
+    PostsDto findPostByTitle(String title) throws IOException;
 
 }
