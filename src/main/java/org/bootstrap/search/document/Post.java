@@ -8,16 +8,16 @@ public record Post (
         String post_state,
         String similarity_key_type,
         String important_key_type,
-        LocalDateTime last_modified_date,
+        String last_modified_date,
         String title,
         String content,
         String dormitory_type,
-        Long post_id,
-        Long user_id,
-        Long id,
-        LocalDateTime create_date,
-        LocalDate end_date,
-        LocalDateTime _timestamp,
+        String post_id,
+        String user_id,
+        String id,
+        String create_date,
+        String end_date,
+        String _timestamp,
         String room_type
 ){
 
