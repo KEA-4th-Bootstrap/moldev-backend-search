@@ -7,11 +7,11 @@ import co.elastic.clients.transport.rest_client.RestClientTransport;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import lombok.Value;
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.message.BasicHeader;
 import org.elasticsearch.client.RestClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,7 +19,7 @@ import java.io.IOException;
 
 @Configuration
 public class ElasticsearchConfig {
-    @Value("${spring.elasticsearch.hostname}")
+    @Value("${spring.elasticsearch.uri}")
     private String hostname;
 
     @Value("${spring.elasticsearch.apikey}")
@@ -28,9 +28,8 @@ public class ElasticsearchConfig {
     @Bean
     public ElasticsearchClient elasticRestClient() throws IOException {
 
-        // Create the low-level client
         RestClient restClient = RestClient
-                .builder(HttpHost.create(hostname))
+                .builder(new HttpHost(hostname, 443, "https"))
                 .setDefaultHeaders(new Header[]{
                         new BasicHeader("Authorization", "ApiKey " + apiKey)
                 })
@@ -45,11 +44,10 @@ public class ElasticsearchConfig {
                 .addModule(new JavaTimeModule())
                 .build();
 
-        // Create the transport with the Jackson mapper
         ElasticsearchTransport transport = new RestClientTransport(
                 restClient, new JacksonJsonpMapper(mapper));
 
-        // Create the API client
+        // And create the API client
         ElasticsearchClient esClient = new ElasticsearchClient(transport);
 
         return esClient;
