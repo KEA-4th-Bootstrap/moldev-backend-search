@@ -30,9 +30,18 @@ public class SearchRepositoryImpl implements SearchRepository{
                         .from(pageable.getPageNumber() * pageable.getPageSize())
                         .size(pageable.getPageSize() + 1)
                         .query(q -> q
-                                .match(t -> t
-                                        .field("title")
-                                        .query(title))
+//                                .match(t -> t
+//                                        .field("title")
+//                                        .query(title))
+//                                .term(t -> t
+//                                        .field("title")
+//                                        .value(title))
+                                // ngram tokenizer를 통해 검색 쿼리를 쪼개 검색해 검색성능 향상
+                                .bool(b -> b
+                                        .should(s -> s
+                                                .match(m -> m
+                                                        .field("title.ngram")
+                                                        .query(title))))
                         )
                 , Post.class);
         // 검색 결과에서 Hits 추출
