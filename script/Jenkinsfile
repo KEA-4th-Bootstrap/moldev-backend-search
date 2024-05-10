@@ -16,6 +16,7 @@ pipeline {
                             cp -f ${application} ./src/main/resources/application.yml
                             ls -l src/main/resources/
                             cat src/main/resources/application.yml
+                            sh "chmod +x ./gradlew"
                             ./gradlew clean build
                     """
                 }
