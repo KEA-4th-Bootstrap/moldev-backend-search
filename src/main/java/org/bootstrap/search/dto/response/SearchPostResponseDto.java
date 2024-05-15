@@ -10,12 +10,12 @@ import java.util.List;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record SearchPostResponseDto(
-        List<Post> posts,
+        List<Post> postList,
         PageInfo pageInfo
 ) {
     public static SearchPostResponseDto of(Slice<Post> postSlice){
         return SearchPostResponseDto.builder()
-                .posts(postSlice.getContent())
+                .postList(postSlice.getContent())
                 .pageInfo(PageInfo.of(postSlice))
                 .build();
     }
