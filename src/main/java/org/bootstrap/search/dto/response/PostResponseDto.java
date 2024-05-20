@@ -14,6 +14,7 @@ public record PostResponseDto (
         Long postId,
         String title,
         String content,
+        String frontUrl,
         Long memberId,
         String thumbnail,
         CategoryType category,
@@ -26,7 +27,8 @@ public record PostResponseDto (
         return PostResponseDto.builder()
                 .postId(Long.valueOf(post.post_id()))
                 .title(post.title())
-                .content(post.content())
+                .content(post.profile_content())
+                .frontUrl(post.front_url())
                 .memberId(Long.valueOf(post.member_id()))
                 .thumbnail(post.thumbnail())
                 .category(convertCodeToDesc(Integer.valueOf(post.category())))
