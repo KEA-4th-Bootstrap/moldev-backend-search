@@ -7,15 +7,18 @@ import org.bootstrap.search.document.Post;
 import org.springframework.data.domain.Slice;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record SearchPostResponseDto(
-        List<Post> postList,
+        List<PostResponseDto> postList,
         PageInfo pageInfo
 ) {
     public static SearchPostResponseDto of(Slice<Post> postSlice){
         return SearchPostResponseDto.builder()
-                .postList(postSlice.getContent())
+                .postList(postSlice.getContent().stream()
+                        .map(PostResponseDto::of)
+                        .collect(Collectors.toList()))
                 .pageInfo(PageInfo.of(postSlice))
                 .build();
     }
