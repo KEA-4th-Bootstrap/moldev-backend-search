@@ -15,6 +15,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class SearchService {
     private final SearchHelper searchHelper;
     private final SearchMapper searchMapper;
     private final RedisUtils redisUtils;
+
     public SearchPostResponseDto findPostByTitle(String title, Pageable pageable) {
         Slice<Post> postSlice = searchHelper.findPostsByTitle(title, pageable);
         List<PostResponseDto> postResponseDtoList = searchMapper.postSliceToResponse(postSlice);
@@ -35,12 +37,10 @@ public class SearchService {
     private List<PostResponseWithRedisDto> createPostResponseWithRedisDto(List<PostResponseDto> postResponseDtoList) {
         return postResponseDtoList.stream()
                 .map(postResponseDto -> {
-                            Double viewCount = redisUtils.getZSetOperations().score(POST_VIEW_COUNT, String.valueOf(postResponseDto.postId()));
-                            if (viewCount == null) {
-                                return PostResponseWithRedisDto.of(postResponseDto, 0);
-                            }
-                            return PostResponseWithRedisDto.of(postResponseDto, viewCount.intValue());
-                        })
+                    Double viewCount = redisUtils.getZSetOperations().score(POST_VIEW_COUNT, String.valueOf(postResponseDto.postId()));
+                    Integer integerViewCount = Objects.isNull(viewCount) ? 0 : viewCount.intValue();
+                    return PostResponseWithRedisDto.of(postResponseDto, integerViewCount);
+                })
                 .collect(Collectors.toList());
 
     }
