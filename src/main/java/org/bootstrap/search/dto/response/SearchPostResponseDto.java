@@ -11,15 +11,13 @@ import java.util.stream.Collectors;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record SearchPostResponseDto(
-        List<PostResponseDto> postList,
+        List<PostResponseWithRedisDto> postList,
         PageInfo pageInfo
 ) {
-    public static SearchPostResponseDto of(Slice<Post> postSlice){
+    public static SearchPostResponseDto of(List<PostResponseWithRedisDto> postList, PageInfo pageInfo){
         return SearchPostResponseDto.builder()
-                .postList(postSlice.getContent().stream()
-                        .map(PostResponseDto::of)
-                        .collect(Collectors.toList()))
-                .pageInfo(PageInfo.of(postSlice))
+                .postList(postList)
+                .pageInfo(pageInfo)
                 .build();
     }
 }
