@@ -10,15 +10,12 @@ pipeline {
 
         stage('Build') {
             steps {
-                withCredentials([file(credentialsId: 'search-application', variable: 'application'),
-                                 file(credentialsId: 'logback', variable: 'logback')]) {
+                withCredentials([file(credentialsId: 'search-application', variable: 'application')]) {
                     sh """
                             mkdir -p ./src/main/resources
                             cp -f ${application} ./src/main/resources/application.yml
-                            cp -f ${logback} ./src/main/resources/logback-spring.xml
                             ls -l src/main/resources/
                             cat src/main/resources/application.yml
-                            cat src/main/resources/logback-spring.xml
                             chmod +x ./gradlew
                             ./gradlew clean build
                     """
