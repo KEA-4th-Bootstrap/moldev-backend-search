@@ -1,7 +1,7 @@
 package org.bootstrap.search.service;
 
-
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.bootstrap.search.common.PageInfo;
 import org.bootstrap.search.document.Post;
 import org.bootstrap.search.dto.response.PostResponseDto;
@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class SearchService {
@@ -28,6 +29,7 @@ public class SearchService {
     private final RedisUtils redisUtils;
 
     public SearchPostResponseDto findPostByTitle(String title, Pageable pageable) {
+        log.info("search: {}", title);
         Slice<Post> postSlice = searchHelper.findPostsByTitle(title, pageable);
         List<PostResponseDto> postResponseDtoList = searchMapper.postSliceToResponse(postSlice);
         List<PostResponseWithRedisDto> postResponseWithRedisDto = createPostResponseWithRedisDto(postResponseDtoList);
