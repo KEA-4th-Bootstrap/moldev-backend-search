@@ -12,6 +12,7 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'search-application', variable: 'application')]) {
                     sh """
+                            rm -rf ./src/main/resources
                             mkdir -p ./src/main/resources
                             cp -f ${application} ./src/main/resources/application.yml
                             ls -l src/main/resources/
