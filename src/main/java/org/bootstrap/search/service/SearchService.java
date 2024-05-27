@@ -29,7 +29,7 @@ public class SearchService {
     private final RedisUtils redisUtils;
 
     public SearchPostResponseDto findPostByTitle(String title, Pageable pageable) {
-        log.info("search: {}", title);
+        log.info("search - {}", title);
         Slice<Post> postSlice = searchHelper.findPostsByTitle(title, pageable);
         List<PostResponseDto> postResponseDtoList = searchMapper.postSliceToResponse(postSlice);
         List<PostResponseWithRedisDto> postResponseWithRedisDto = createPostResponseWithRedisDto(postResponseDtoList);
