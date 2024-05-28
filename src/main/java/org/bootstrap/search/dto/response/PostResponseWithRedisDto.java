@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Builder(access = AccessLevel.PRIVATE)
 public record PostResponseWithRedisDto(
-        Long postId,
+        Long id,
         Long memberId,
         String title,
         String content,
@@ -22,7 +22,7 @@ public record PostResponseWithRedisDto(
 ) {
     public static PostResponseWithRedisDto of(PostResponseDto postResponseDto, Integer redisViewCount) {
         return PostResponseWithRedisDto.builder()
-                .postId(postResponseDto.postId())
+                .id(postResponseDto.postId())
                 .memberId(postResponseDto.memberId())
                 .title(postResponseDto.title())
                 .content(postResponseDto.content())
