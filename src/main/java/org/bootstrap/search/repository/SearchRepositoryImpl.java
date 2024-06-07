@@ -24,24 +24,21 @@ public class SearchRepositoryImpl implements SearchRepository{
 
     private final ElasticsearchClient esClient;
 
-    public Slice<Post> findPostByTitle(String title, Pageable pageable) throws IOException {
+    public Slice<Post> findPostByTitle(String query, Pageable pageable) throws IOException {
         SearchResponse<Post> getPosts = esClient.search(ss -> ss
                         .index(POSTS)
                         .from(pageable.getPageNumber() * pageable.getPageSize())
                         .size(pageable.getPageSize() + 1)
                         .query(q -> q
-//                                .match(t -> t
-//                                        .field("title")
-//                                        .query(title))
-//                                .term(t -> t
-//                                        .field("title")
-//                                        .value(title))
-                                // ngram tokenizer를 통해 검색 쿼리를 쪼개 검색해 검색성능 향상
                                 .bool(b -> b
                                         .should(s -> s
                                                 .match(m -> m
                                                         .field("title.ngram")
-                                                        .query(title))))
+                                                        .query(query)))
+                                        .should(s -> s
+                                                .match(m -> m
+                                                        .field("profile_content.ngram")
+                                                        .query(query))))
                         )
                 , Post.class);
         // 검색 결과에서 Hits 추출
